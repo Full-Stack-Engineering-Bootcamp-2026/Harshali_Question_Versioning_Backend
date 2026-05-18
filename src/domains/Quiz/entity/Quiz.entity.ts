@@ -33,7 +33,7 @@ export class Quiz {
   @Column()
   createdById!: number;
 
-  @Column({ type: "boolean", default: "true" })
+  @Column({ type: "boolean", default: true })
   isActive!: boolean;
 
   @OneToMany(() => QuizQuestion, (quizQuestion) => quizQuestion.quiz)
