@@ -73,16 +73,6 @@ export const authenticate = async (
 
       return;
     }
-    const allowedRoutes = ["/force-reset-password", "/logout"];
-
-    if (user.mustChangePassword === true && !allowedRoutes.includes(req.path)) {
-      res.status(HttpStatus.FORBIDDEN).json({
-        status: HttpStatus.FORBIDDEN,
-        message: "Password reset required",
-      });
-
-      return;
-    }
 
     req.user = {
       id: payload.id,

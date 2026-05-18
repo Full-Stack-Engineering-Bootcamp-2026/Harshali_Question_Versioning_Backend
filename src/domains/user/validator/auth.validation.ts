@@ -15,27 +15,33 @@ const passwordSchema = Joi.string() //joi.string,joi.number,joi.object,joi.array
     "string.pattern.base":
       "Password must contain uppercase, lowercase, number and special character",
   });
-const forceResetPasswordValidation = Joi.string()
-  .min(12)
-  .max(64)
-  .pattern(/[A-Z]/)
-  .pattern(/[a-z]/)
-  .pattern(/[0-9]/)
-  .pattern(/[^A-Za-z0-9]/)
-  .required()
-  .messages({
-    "string.empty": "Password is required",
-    "string.min": "Password must be at least 12 characters",
-    "string.max": "Password cant exceed 64 characters",
-    "string.pattern.base":
-      "Password must contain uppercase, lowercase, number and special character",
-  });
+// const forceResetPasswordValidation = Joi.string()
+//   .min(12)
+//   .max(64)
+//   .pattern(/[A-Z]/)
+//   .pattern(/[a-z]/)
+//   .pattern(/[0-9]/)
+//   .pattern(/[^A-Za-z0-9]/)
+//   .required()
+//   .messages({
+//     "string.empty": "Password is required",
+//     "string.min": "Password must be at least 12 characters",
+//     "string.max": "Password cant exceed 64 characters",
+//     "string.pattern.base":
+//       "Password must contain uppercase, lowercase, number and special character",
+//   });
 //register schema
 export const registerSchema = Joi.object({
-  name: Joi.string().trim().min(2).max(100).required().messages({
-    "string.empty": "Name is required",
-    "string.min": "Name must be at least 2 characters",
-    "string.max": "Name cant exceed 100 characters",
+  firstName: Joi.string().trim().min(2).max(100).required().messages({
+    "string.empty": "First name is required",
+    "string.min": "First name must be at least 2 characters",
+    "string.max": "First name cant exceed 100 characters",
+  }),
+
+  lastName: Joi.string().trim().min(2).max(100).required().messages({
+    "string.empty": "Last name is required",
+    "string.min": "Last name must be at least 2 characters",
+    "string.max": "Last name cant exceed 100 characters",
   }),
 
   email: Joi.string().trim().email().required().messages({
@@ -44,13 +50,7 @@ export const registerSchema = Joi.object({
   }),
 
   password: passwordSchema,
-
-  confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
-    "any.only": "Passwords do not match", //if ref not matching
-    "string.empty": "Confirm password is required",
-  }),
 });
-
 //login schema
 export const loginSchema = Joi.object({
   email: Joi.string().trim().email().required().messages({
@@ -64,47 +64,47 @@ export const loginSchema = Joi.object({
 });
 
 //forgot password scehma
-export const forgotPasswordSchema = Joi.object({
-  email: Joi.string().trim().email().required().messages({
-    "string.email": "Invalid email format",
-    "string.empty": "Email is required",
-  }),
-});
+// export const forgotPasswordSchema = Joi.object({
+//   email: Joi.string().trim().email().required().messages({
+//     "string.email": "Invalid email format",
+//     "string.empty": "Email is required",
+//   }),
+// });
 
-export const resetPasswordSchema = Joi.object({
-  resetToken: Joi.string().required().messages({
-    "string.empty": "Token is required",
-  }),
+// export const resetPasswordSchema = Joi.object({
+//   resetToken: Joi.string().required().messages({
+//     "string.empty": "Token is required",
+//   }),
 
-  password: passwordSchema,
+//   password: passwordSchema,
 
-  confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
-    "any.only": "Passwords do not match",
-    "string.empty": "Confirm password is required",
-  }),
-});
+//   confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
+//     "any.only": "Passwords do not match",
+//     "string.empty": "Confirm password is required",
+//   }),
+// });
 
-export const forceResetPasswordSchema = Joi.object({
-  password: forceResetPasswordValidation,
+// export const forceResetPasswordSchema = Joi.object({
+//   password: forceResetPasswordValidation,
 
-  confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
-    "any.only": "Passwords do not match", //any.only for valid
-    "string.empty": "Confirm password is required",
-  }),
-});
+//   confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
+//     "any.only": "Passwords do not match", //any.only for valid
+//     "string.empty": "Confirm password is required",
+//   }),
+// });
 
-export const changePasswordSchema = Joi.object({
-  currentPassword: Joi.string().required().messages({
-    "string.empty": "Current password is required",
-  }),
+// export const changePasswordSchema = Joi.object({
+//   currentPassword: Joi.string().required().messages({
+//     "string.empty": "Current password is required",
+//   }),
 
-  newPassword: passwordSchema,
+//   newPassword: passwordSchema,
 
-  confirmNewPassword: Joi.string()
-    .valid(Joi.ref("newPassword")) //take ref and compare if same
-    .required()
-    .messages({
-      "any.only": "Passwords do not match",
-      "string.empty": "Confirm password is required",
-    }),
-});
+//   confirmNewPassword: Joi.string()
+//     .valid(Joi.ref("newPassword")) //take ref and compare if same
+//     .required()
+//     .messages({
+//       "any.only": "Passwords do not match",
+//       "string.empty": "Confirm password is required",
+//     }),
+//});

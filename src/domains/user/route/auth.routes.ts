@@ -6,10 +6,7 @@ import { registerSchema } from "../validator/auth.validation";
 import { loginSchema } from "../validator/auth.validation";
 import { validate } from "../../../common/middleware/validate.middleware";
 import { authenticate } from "../../../common/middleware/authenticate.middleware";
-import { changePasswordSchema } from "../validator/auth.validation";
-import { forceResetPasswordSchema } from "../validator/auth.validation";
-import { forgotPasswordSchema } from "../validator/auth.validation";
-import { resetPasswordSchema } from "../validator/auth.validation";
+
 @Service()
 export class AuthRoutes {
   public router: Router;
@@ -32,43 +29,9 @@ export class AuthRoutes {
     );
 
     this.router.post(
-      //public route
       "/login",
       validate(loginSchema),
       asyncHandler(this.controller.login.bind(this.controller)),
-    );
-
-    this.router.patch(
-      //login needed
-      "/change-password",
-      authenticate,
-      validate(changePasswordSchema),
-      asyncHandler(this.controller.changePassword.bind(this.controller)),
-    );
-
-    this.router.patch(
-      "/force-reset-password",
-      authenticate,
-      validate(forceResetPasswordSchema),
-      asyncHandler(this.controller.forceResetPassword.bind(this.controller)),
-    );
-
-    this.router.get(
-      "/me",
-      authenticate,
-      asyncHandler(this.controller.me.bind(this.controller)),
-    );
-
-    this.router.post(
-      "/forgot-password",
-      validate(forgotPasswordSchema),
-      asyncHandler(this.controller.forgotPassword.bind(this.controller)),
-    );
-
-    this.router.post(
-      "/reset-password",
-      validate(resetPasswordSchema),
-      asyncHandler(this.controller.resetPassword.bind(this.controller)),
     );
   }
 }

@@ -62,13 +62,13 @@ class Application {
     });
 
     const authRoutes = Container.get(AuthRoutes);
-    const adminRoutes = Container.get(AdminRoutes);
+    //  const adminRoutes = Container.get(AdminRoutes);
 
-    const adminDashboardRoutes = Container.get(AdminRoutes);
+    // const adminDashboardRoutes = Container.get(AdminRoutes);
     v1Router.use("/auth", authRoutes.getRoutes());
-    v1Router.use("/admin", adminRoutes.getRoutes());
+    // v1Router.use("/admin", adminRoutes.getRoutes());
 
-    v1Router.use("/admin/dashboard", adminDashboardRoutes.getRoutes());
+    //  v1Router.use("/admin/dashboard", adminDashboardRoutes.getRoutes());
 
     this.app.use("/api/v1", v1Router);
 

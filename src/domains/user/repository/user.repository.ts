@@ -10,33 +10,9 @@ export class UserRepository {
     this.repository = AppDataSource.getRepository(User);
   }
 
-  async findAll(): Promise<User[]> {
-    const users = await this.repository.find();
-
-    return users;
-  }
-
-  async findById(id: number): Promise<User | null> {
-    const user = await this.repository.findOne({
-      where: { id },
-    });
-
-    return user;
-  }
-
   async findByEmail(email: string): Promise<User | null> {
     const user = await this.repository.findOne({
       where: { email },
-    });
-
-    return user;
-  }
-
-  async findByResetToken(token: string): Promise<User | null> {
-    const user = await this.repository.findOne({
-      where: {
-        resetToken: token,
-      },
     });
 
     return user;
@@ -48,32 +24,5 @@ export class UserRepository {
     const user = await this.repository.save(item);
 
     return user;
-  }
-
-  async update(id: number, data: Partial<User>): Promise<User | null> {
-    await this.repository.update(id, {
-      ...data,
-      updatedAt: new Date(),
-    });
-
-    return await this.findById(id);
-  }
-
-  async deactivate(id: number): Promise<number> {
-    const result = await this.repository.update(id, {
-      isActive: false,
-      updatedAt: new Date(),
-    });
-
-    return result.affected ?? 0;
-  }
-
-  async reactivate(id: number): Promise<number> {
-    const result = await this.repository.update(id, {
-      isActive: true,
-      updatedAt: new Date(),
-    });
-
-    return result.affected ?? 0;
   }
 }

@@ -1,65 +1,27 @@
-import { RoleType } from "../../../common/constants/roles.constants";
+export interface RegisterRequestDto {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 
 export interface UserResponseDto {
   id: number;
-  name: string;
+  publicId: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  role: RoleType;
+  role: string;
   isActive: boolean;
-  mustChangePassword: boolean;
   createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface RegisterRequestDto {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export interface RegisterResponseDto {
-  user: UserResponseDto;
+  updatedAt?: Date;
 }
 
 export interface LoginRequestDto {
   email: string;
   password: string;
 }
-
 export interface AuthResponseDto {
   accessToken: string;
-  //  mustChangePassword: boolean;
   user: UserResponseDto;
-}
-
-export interface JwtPayloadDto {
-  id: number;
-  email: string;
-  role: RoleType;
-}
-
-export interface ForgotPasswordRequestDto {
-  email: string;
-}
-
-export interface ResetPasswordRequestDto {
-  resetToken: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export interface ForceResetPasswordRequestDto {
-  //staff/admin will send new pass
-  password: string;
-  confirmPassword: string;
-}
-
-export interface ChangePasswordRequestDto {
-  currentPassword: string;
-  newPassword: string;
-  confirmNewPassword: string;
-}
-export interface SaveFcmTokenRequestDto {
-  fcmToken: string;
 }
