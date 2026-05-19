@@ -97,5 +97,19 @@ export class QuestionService {
     };
   }
 
-  public;
+  public async getAllQuestions(): Promise<QuestionResponseDto[]> {
+    const questions = await this.questionRepository.findAllQuestions();
+
+    return questions.map((question) => {
+      const latestVersion = question.versions[0];
+
+      return {
+        publicId: question.publicId,
+        questionText: latestVersion.questionText,
+        answerType: latestVersion.answerType,
+        versionNumber: latestVersion.versionNumber,
+        options: latestVersion.options.map((option) => option.optionText),
+      };
+    });
+  }
 }

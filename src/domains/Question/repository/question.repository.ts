@@ -62,4 +62,24 @@ export class QuestionRepository {
   ): Promise<void> {
     await this.versionRepository.update(id, data);
   }
+  //que with version with option(arr of que obj)
+  public async findAllQuestions(): Promise<Question[]> {
+    return await this.questionRepository
+      .createQueryBuilder("question")
+
+      .leftJoinAndSelect(
+        "question.versions",
+        "version",
+        "version.isLatest = true",
+      )
+
+      .leftJoinAndSelect("version.options", "option")
+
+      .where("question.isActive = :isActive", {
+        isActive: true,
+      })
+
+      .orderBy("question.createdAt", "DESC")
+      .getMany();
+  }
 }

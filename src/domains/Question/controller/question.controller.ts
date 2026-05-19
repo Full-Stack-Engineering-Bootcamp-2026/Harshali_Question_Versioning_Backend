@@ -36,4 +36,14 @@ export class QuestionController {
       data,
     });
   }
+
+  public async getAllQuestions(req: Request, res: Response): Promise<Response> {
+    const data = await this.questionService.getAllQuestions();
+
+    return generateResponse(res, {
+      statusCode: HttpStatus.OK,
+      message: "Questions fetched successfully",
+      data,
+    });
+  }
 }
