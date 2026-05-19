@@ -13,3 +13,9 @@ export interface QuestionResponseDto {
   answerType: string;
   versionNumber: number;
 }
+
+export interface UpdateQuestionRequestDto {
+  questionText: string;
+  answerType: QuestionType;
+  options?: string[];
+}

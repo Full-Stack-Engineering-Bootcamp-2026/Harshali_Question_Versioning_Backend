@@ -6,6 +6,7 @@ import { generateResponse } from "../../../common/utils/response.util";
 import { HttpStatus } from "../../../common/constants/http-status.constants";
 import { CreateQuestionRequestDto } from "../dto/question.dto";
 import { QuestionService } from "../service/question.service";
+import { UpdateQuestionRequestDto } from "../dto/question.dto";
 @Service()
 export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}
@@ -19,6 +20,19 @@ export class QuestionController {
     return generateResponse(res, {
       statusCode: HttpStatus.CREATED,
       message: "Question created successfully",
+      data,
+    });
+  }
+
+  public async updateQuestion(req: Request, res: Response): Promise<Response> {
+    const data = await this.questionService.updateQuestion(
+      req.params.publicId as string,
+      req.body as UpdateQuestionRequestDto,
+    );
+
+    return generateResponse(res, {
+      statusCode: HttpStatus.OK,
+      message: "Question updated successfully",
       data,
     });
   }

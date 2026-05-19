@@ -36,4 +36,30 @@ export class QuestionRepository {
 
     return await this.optionRepository.save(options);
   }
+  //find que with uuid sent
+  public async findQuestionByPublicId(
+    publicId: string,
+  ): Promise<Question | null> {
+    return await this.questionRepository.findOne({
+      where: { publicId },
+    });
+  }
+  //find latest version of que means isLatest:true
+  public async findLatestVersion(
+    questionId: number,
+  ): Promise<QuestionVersion | null> {
+    return await this.versionRepository.findOne({
+      where: {
+        questionId,
+        isLatest: true,
+      },
+    });
+  }
+
+  public async updateOldVersion(
+    id: number,
+    data: Partial<QuestionVersion>,
+  ): Promise<void> {
+    await this.versionRepository.update(id, data);
+  }
 }

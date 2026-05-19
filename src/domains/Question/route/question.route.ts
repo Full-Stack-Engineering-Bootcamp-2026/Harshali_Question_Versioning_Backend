@@ -28,6 +28,13 @@ export class QuestionRoutes {
       validate(createQuestionSchema),
       asyncHandler(this.controller.createQuestion.bind(this.controller)),
     );
+
+    this.router.patch(
+      "/:publicId",
+      authenticate,
+      requireRole(ROLES.ADMIN),
+      asyncHandler(this.controller.updateQuestion.bind(this.controller)),
+    );
   }
 
   public getRouter(): Router {
