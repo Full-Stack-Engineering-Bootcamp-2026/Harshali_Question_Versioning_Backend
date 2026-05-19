@@ -41,6 +41,13 @@ export class QuestionRoutes {
       requireRole(ROLES.ADMIN),
       asyncHandler(this.controller.getAllQuestions.bind(this.controller)),
     );
+
+    this.router.get(
+      "/:publicId",
+      authenticate,
+      requireRole(ROLES.ADMIN),
+      asyncHandler(this.controller.getQuestionByPublicId.bind(this.controller)),
+    );
   }
 
   public getRouter(): Router {

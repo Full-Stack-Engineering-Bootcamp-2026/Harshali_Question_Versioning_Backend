@@ -82,4 +82,20 @@ export class QuestionRepository {
       .orderBy("question.createdAt", "DESC")
       .getMany();
   }
+
+  public async findQuestionDetailsByPublicId(
+    publicId: string,
+  ): Promise<Question | null> {
+    return await this.questionRepository
+      .createQueryBuilder("question")
+      .leftJoinAndSelect(
+        "question.versions",
+        "version",
+        "version.isLatest = true",
+      )
+      .leftJoinAndSelect("version.options", "option")
+      .where("question.publicId = :publicId", { publicId })
+      .andWhere("question.isActive = :isActive", { isActive: true })
+      .getOne();
+  }
 }

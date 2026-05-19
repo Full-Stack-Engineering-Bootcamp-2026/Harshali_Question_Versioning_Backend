@@ -12,6 +12,7 @@ export interface QuestionResponseDto {
   questionText: string;
   answerType: string;
   versionNumber: number;
+  options?: string[];
 }
 
 export interface UpdateQuestionRequestDto {
@@ -24,5 +25,5 @@ export interface GetAllQuestionsResponseDto {
   questionText: string;
   answerType: string;
   versionNumber: number;
-  options: string[];
+  options?: string[];
 }

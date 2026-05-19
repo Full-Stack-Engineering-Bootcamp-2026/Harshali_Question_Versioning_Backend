@@ -112,4 +112,25 @@ export class QuestionService {
       };
     });
   }
+
+  public async getQuestionByPublicId(
+    publicId: string,
+  ): Promise<QuestionResponseDto> {
+    const question =
+      await this.questionRepository.findQuestionDetailsByPublicId(publicId);
+
+    if (!question) {
+      throw new NotFoundException("Question not found");
+    }
+
+    const latestVersion = question.versions[0];
+
+    return {
+      publicId: question.publicId,
+      questionText: latestVersion.questionText,
+      answerType: latestVersion.answerType,
+      versionNumber: latestVersion.versionNumber,
+      options: latestVersion.options.map((option) => option.optionText),
+    };
+  }
 }

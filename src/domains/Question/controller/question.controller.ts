@@ -46,4 +46,19 @@ export class QuestionController {
       data,
     });
   }
+
+  public async getQuestionByPublicId(
+    req: Request,
+    res: Response,
+  ): Promise<Response> {
+    const data = await this.questionService.getQuestionByPublicId(
+      req.params.publicId as string,
+    );
+
+    return generateResponse(res, {
+      statusCode: HttpStatus.OK,
+      message: "Question fetched successfully",
+      data,
+    });
+  }
 }
