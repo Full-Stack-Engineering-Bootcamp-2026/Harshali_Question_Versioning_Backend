@@ -13,7 +13,7 @@ import { User } from "../../user/entity/user.entity";
 import { ManyToOne } from "typeorm";
 import { QuizQuestion } from "../../QuizQuestion/entity/QuizQuestion.entity";
 import { QuizAttempt } from "../../QuizAttempt/entity/QuizAttempt.entity";
-import { boolean } from "joi";
+
 @Entity("quiz")
 export class Quiz {
   @PrimaryGeneratedColumn()
