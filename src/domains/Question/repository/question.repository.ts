@@ -1,0 +1,39 @@
+import { Repository } from "typeorm";
+import { AppDataSource } from "../../../db/data-source";
+import { Service } from "typedi";
+import { Question } from "../entity/Question.entity";
+import { QuestionVersion } from "../../QuestionVersion/entity/QuestionVersion.entity";
+import { QuestionOption } from "../../QuestionOption/entity/QuestionOption.entity";
+@Service()
+export class QuestionRepository {
+  private readonly questionRepository: Repository<Question>;
+  private readonly versionRepository: Repository<QuestionVersion>;
+  private readonly optionRepository: Repository<QuestionOption>;
+  constructor() {
+    this.questionRepository = AppDataSource.getRepository(Question);
+    this.versionRepository = AppDataSource.getRepository(QuestionVersion);
+    this.optionRepository = AppDataSource.getRepository(QuestionOption);
+  }
+
+  public async createQuestion(data: Partial<Question>): Promise<Question> {
+    const question = this.questionRepository.create(data);
+
+    return await this.questionRepository.save(question);
+  }
+
+  public async createVersion(
+    data: Partial<QuestionVersion>,
+  ): Promise<QuestionVersion> {
+    const version = this.versionRepository.create(data);
+
+    return await this.versionRepository.save(version);
+  }
+
+  public async createOptions(
+    data: Partial<QuestionOption>[],
+  ): Promise<QuestionOption[]> {
+    const options = this.optionRepository.create(data);
+
+    return await this.optionRepository.save(options);
+  }
+}

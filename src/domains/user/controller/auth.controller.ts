@@ -5,7 +5,7 @@ import { AuthService } from "../service/auth.service";
 import { RegisterRequestDto } from "../dto/auth.dto";
 import { HttpStatus } from "../../../common/constants/http-status.constants";
 import { generateResponse } from "../../../common/utils/response.util";
-
+import { LoginRequestDto } from "../dto/auth.dto";
 @Service()
 export class AuthController {
   constructor(private readonly service: AuthService) {}
