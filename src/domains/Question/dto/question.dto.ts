@@ -19,3 +19,10 @@ export interface UpdateQuestionRequestDto {
   answerType: QuestionType;
   options?: string[];
 }
+export interface GetAllQuestionsResponseDto {
+  publicId: string;
+  questionText: string;
+  answerType: string;
+  versionNumber: number;
+  options: string[];
+}

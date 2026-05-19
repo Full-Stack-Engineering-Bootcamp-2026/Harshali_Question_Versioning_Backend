@@ -96,4 +96,6 @@ export class QuestionService {
       versionNumber: newVersion.versionNumber,
     };
   }
+
+  public;
 }
