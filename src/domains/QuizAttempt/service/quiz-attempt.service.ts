@@ -1,7 +1,7 @@
 import { Service } from "typedi";
 import { AttemptRepository } from "../repository/quiz-attempt.repository";
 import { QuizRepository } from "../../Quiz/repository/quiz.repository";
-
+import { UserAttemptResponseDto } from "../dto/quiz-attempt.dto";
 import {
   SubmitQuizAttemptRequestDto,
   QuizAttemptResponseDto,
@@ -91,5 +91,19 @@ export class AttemptService {
       attemptNumber: attempt.attemptNumber,
       totalAnswers: data.answers.length,
     };
+  }
+
+  public async getMyAttempts(
+    userId: number,
+  ): Promise<UserAttemptResponseDto[]> {
+    const attempts = await this.attemptRepository.findMyAttempts(userId);
+
+    return attempts.map((attempt) => ({
+      publicId: attempt.publicId,
+      quizPublicId: attempt.quiz.publicId,
+      quizTitle: attempt.quiz.title,
+      attemptNumber: attempt.attemptNumber,
+      submittedAt: attempt.submittedAt,
+    }));
   }
 }

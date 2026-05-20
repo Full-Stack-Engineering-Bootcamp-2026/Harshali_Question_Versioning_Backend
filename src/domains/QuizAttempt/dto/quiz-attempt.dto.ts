@@ -12,3 +12,11 @@ export interface QuizAttemptResponseDto {
   attemptNumber: number;
   totalAnswers: number;
 }
+
+export interface UserAttemptResponseDto {
+  publicId: string;
+  quizTitle: string;
+  quizPublicId: string;
+  attemptNumber: number;
+  submittedAt: Date;
+}

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Service } from "typedi";
 
-import { AttemptController } from "../controller/quiz-attempt.dto";
+import { AttemptController } from "../controller/quiz-attempt.controller";
 
 import { authenticate } from "../../../common/middleware/authenticate.middleware";
 
@@ -27,6 +27,13 @@ export class AttemptRoutes {
       authenticate,
       requireRole(ROLES.USER),
       asyncHandler(this.controller.submitQuizAttempt.bind(this.controller)),
+    );
+
+    this.router.get(
+      "/my",
+      authenticate,
+      requireRole(ROLES.USER),
+      asyncHandler(this.controller.getMyAttempts.bind(this.controller)),
     );
   }
 

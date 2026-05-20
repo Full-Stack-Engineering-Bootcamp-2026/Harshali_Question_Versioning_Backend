@@ -79,4 +79,18 @@ export class AttemptRepository {
 
     return await this.answerOptionRepository.save(answerOptions);
   }
+
+  public async findMyAttempts(userId: number): Promise<QuizAttempt[]> {
+    return await this.attemptRepository.find({
+      where: {
+        userId,
+      },
+      relations: {
+        quiz: true,
+      },
+      order: {
+        submittedAt: "DESC",
+      },
+    });
+  }
 }

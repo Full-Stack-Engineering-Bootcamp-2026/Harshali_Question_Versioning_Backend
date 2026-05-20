@@ -28,4 +28,14 @@ export class AttemptController {
       data,
     });
   }
+
+  public async getMyAttempts(req: Request, res: Response): Promise<Response> {
+    const data = await this.attemptService.getMyAttempts(req.user!.id);
+
+    return generateResponse(res, {
+      statusCode: HttpStatus.OK,
+      message: "My attempts fetched successfully",
+      data,
+    });
+  }
 }
