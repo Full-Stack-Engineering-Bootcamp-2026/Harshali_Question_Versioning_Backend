@@ -20,3 +20,19 @@ export interface UserAttemptResponseDto {
   attemptNumber: number;
   submittedAt: Date;
 }
+
+export interface AttemptAnswerDetailDto {
+  questionText: string;
+  answerType: string;
+  versionNumber: number;
+  textAnswer?: string | null;
+  selectedOptions: string[];
+}
+
+export interface AttemptDetailResponseDto {
+  publicId: string;
+  quizTitle: string;
+  attemptNumber: number;
+  submittedAt: Date;
+  answers: AttemptAnswerDetailDto[];
+}

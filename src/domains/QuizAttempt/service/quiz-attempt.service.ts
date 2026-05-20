@@ -8,7 +8,7 @@ import {
 } from "../dto/quiz-attempt.dto";
 
 import { NotFoundException } from "../../../common/exceptions";
-
+import { AttemptDetailResponseDto } from "../dto/quiz-attempt.dto";
 @Service()
 export class AttemptService {
   constructor(
@@ -105,5 +105,33 @@ export class AttemptService {
       attemptNumber: attempt.attemptNumber,
       submittedAt: attempt.submittedAt,
     }));
+  }
+  public async getAttemptByPublicId(
+    publicId: string,
+  ): Promise<AttemptDetailResponseDto> {
+    const attempt =
+      await this.attemptRepository.findAttemptDetailsByPublicId(publicId);
+
+    if (!attempt) {
+      throw new NotFoundException("Attempt not found");
+    }
+
+    return {
+      publicId: attempt.publicId,
+      quizTitle: attempt.quiz.title,
+      attemptNumber: attempt.attemptNumber,
+      submittedAt: attempt.submittedAt,
+
+      answers: attempt.answers.map((answer) => ({
+        questionText: answer.questionVersion.questionText,
+        answerType: answer.questionVersion.answerType,
+        versionNumber: answer.questionVersion.versionNumber,
+        textAnswer: answer.textAnswer,
+
+        selectedOptions: answer.selectedOptions.map(
+          (selectedOption) => selectedOption.questionOption.optionText,
+        ),
+      })),
+    };
   }
 }

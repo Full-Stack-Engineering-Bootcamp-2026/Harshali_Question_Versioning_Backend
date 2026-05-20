@@ -38,4 +38,19 @@ export class AttemptController {
       data,
     });
   }
+
+  public async getAttemptByPublicId(
+    req: Request,
+    res: Response,
+  ): Promise<Response> {
+    const data = await this.attemptService.getAttemptByPublicId(
+      req.params.publicId as string,
+    );
+
+    return generateResponse(res, {
+      statusCode: HttpStatus.OK,
+      message: "Attempt fetched successfully",
+      data,
+    });
+  }
 }

@@ -35,6 +35,13 @@ export class AttemptRoutes {
       requireRole(ROLES.USER),
       asyncHandler(this.controller.getMyAttempts.bind(this.controller)),
     );
+
+    this.router.get(
+      "/:publicId",
+      authenticate,
+      requireRole(ROLES.USER),
+      asyncHandler(this.controller.getAttemptByPublicId.bind(this.controller)),
+    );
   }
 
   public getRouter(): Router {

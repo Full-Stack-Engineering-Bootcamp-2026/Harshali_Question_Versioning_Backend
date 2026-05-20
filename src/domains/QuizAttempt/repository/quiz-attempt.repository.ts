@@ -93,4 +93,17 @@ export class AttemptRepository {
       },
     });
   }
+  public async findAttemptDetailsByPublicId(
+    publicId: string,
+  ): Promise<QuizAttempt | null> {
+    return await this.attemptRepository
+      .createQueryBuilder("attempt")
+      .leftJoinAndSelect("attempt.quiz", "quiz")
+      .leftJoinAndSelect("attempt.answers", "answer")
+      .leftJoinAndSelect("answer.questionVersion", "questionVersion")
+      .leftJoinAndSelect("answer.selectedOptions", "selectedOption")
+      .leftJoinAndSelect("selectedOption.questionOption", "questionOption")
+      .where("attempt.publicId = :publicId", { publicId })
+      .getOne();
+  }
 }
