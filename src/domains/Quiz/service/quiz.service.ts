@@ -86,15 +86,18 @@ export class QuizService {
       questions: quiz.quizQuestions.map((quizQuestion) => ({
         questionPublicId: quizQuestion.question.publicId,
 
+        questionVersionPublicId: quizQuestion.questionVersion.publicId,
+
         questionText: quizQuestion.questionVersion.questionText,
 
         answerType: quizQuestion.questionVersion.answerType,
 
         versionNumber: quizQuestion.questionVersion.versionNumber,
 
-        options: quizQuestion.questionVersion.options.map(
-          (option) => option.optionText,
-        ),
+        options: quizQuestion.questionVersion.options.map((option) => ({
+          publicId: option.publicId,
+          optionText: option.optionText,
+        })),
       })),
     };
   }

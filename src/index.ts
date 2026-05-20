@@ -18,6 +18,8 @@ import { AuthRoutes } from "./domains/user/route/auth.routes";
 import { AdminRoutes } from "./domains/user/route/admin.routes";
 import { QuestionRoutes } from "./domains/Question/route/question.route";
 import { QuizRoutes } from "./domains/Quiz/route/quiz.route";
+
+import { AttemptRoutes } from "./domains/QuizAttempt/route/quiz-attempt.route";
 class Application {
   public app: Express;
   private port: number;
@@ -65,12 +67,15 @@ class Application {
     const authRoutes = Container.get(AuthRoutes);
     const questionRoutes = Container.get(QuestionRoutes);
     const quizRoutes = Container.get(QuizRoutes);
+
+    const attemptRoutes = Container.get(AttemptRoutes);
     //  const adminRoutes = Container.get(AdminRoutes);
 
     // const adminDashboardRoutes = Container.get(AdminRoutes);
     v1Router.use("/auth", authRoutes.getRoutes());
     v1Router.use("/questions", questionRoutes.getRouter());
     v1Router.use("/quiz", quizRoutes.getRouter());
+    v1Router.use("/quiz-attempt", attemptRoutes.getRouter());
     // v1Router.use("/admin", adminRoutes.getRoutes());
 
     //  v1Router.use("/admin/dashboard", adminDashboardRoutes.getRoutes());

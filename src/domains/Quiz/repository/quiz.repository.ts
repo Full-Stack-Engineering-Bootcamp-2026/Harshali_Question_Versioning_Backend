@@ -14,12 +14,13 @@ export class QuizRepository {
     this.quizRepository = AppDataSource.getRepository(Quiz);
     this.quizQuestionRepository = AppDataSource.getRepository(QuizQuestion);
   }
-  //create quiz
+  //admin create quiz
   public async createQuiz(data: Partial<Quiz>): Promise<Quiz> {
     const quiz = this.quizRepository.create(data);
 
     return await this.quizRepository.save(quiz);
   }
+
   //create quiz que
   public async createQuizQuestions(
     data: Partial<QuizQuestion>[],
@@ -58,5 +59,14 @@ export class QuizRepository {
       .orderBy("quizQuestion.questionOrder", "ASC")
       .addOrderBy("option.optionOrder", "ASC")
       .getOne();
+  }
+
+  public async findQuizByPublicId(publicId: string): Promise<Quiz | null> {
+    return await this.quizRepository.findOne({
+      where: {
+        publicId,
+        isActive: true,
+      },
+    });
   }
 }

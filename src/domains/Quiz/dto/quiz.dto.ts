@@ -9,12 +9,18 @@ export interface QuizResponseDto {
   totalQuestions: number;
 }
 
+export interface QuizOptionResponseDto {
+  publicId: string;
+  optionText: string;
+}
+
 export interface QuizQuestionResponseDto {
   questionPublicId: string;
+  questionVersionPublicId: string;
   questionText: string;
   answerType: string;
   versionNumber: number;
-  options: string[];
+  options: QuizOptionResponseDto[];
 }
 
 export interface QuizDetailResponseDto {
