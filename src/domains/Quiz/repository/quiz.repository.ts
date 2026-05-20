@@ -28,4 +28,19 @@ export class QuizRepository {
 
     return await this.quizQuestionRepository.save(quizQuestions);
   }
+
+  public async findAllQuizzes(): Promise<Quiz[]> {
+    return await this.quizRepository.find({
+      where: {
+        isActive: true,
+      },
+      relations: {
+        quizQuestions: true,
+      },
+
+      order: {
+        createdAt: "DESC",
+      },
+    });
+  }
 }

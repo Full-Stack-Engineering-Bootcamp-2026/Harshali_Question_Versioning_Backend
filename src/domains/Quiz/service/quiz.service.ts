@@ -59,4 +59,14 @@ export class QuizService {
       totalQuestions: quizQuestionArr.length,
     };
   }
+
+  public async getAllQuizzes(): Promise<QuizResponseDto[]> {
+    const quizzes = await this.quizRepository.findAllQuizzes();
+
+    return quizzes.map((quiz) => ({
+      publicId: quiz.publicId,
+      title: quiz.title,
+      totalQuestions: quiz.quizQuestions ? quiz.quizQuestions.length : 0,
+    }));
+  }
 }

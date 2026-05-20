@@ -28,6 +28,12 @@ export class QuizRoutes {
       requireRole(ROLES.ADMIN),
       asyncHandler(this.controller.createQuiz.bind(this.controller)),
     );
+
+    this.router.get(
+      "/",
+      authenticate,
+      asyncHandler(this.controller.getAllQuizzes.bind(this.controller)),
+    );
   }
 
   public getRouter(): Router {

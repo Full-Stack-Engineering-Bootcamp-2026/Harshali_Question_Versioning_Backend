@@ -25,4 +25,14 @@ export class QuizController {
       data,
     });
   }
+
+  public async getAllQuizzes(req: Request, res: Response): Promise<Response> {
+    const data = await this.quizService.getAllQuizzes();
+
+    return generateResponse(res, {
+      statusCode: HttpStatus.OK,
+      message: "Quizzes fetched successfully",
+      data,
+    });
+  }
 }
