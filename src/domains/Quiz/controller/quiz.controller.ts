@@ -35,4 +35,19 @@ export class QuizController {
       data,
     });
   }
+
+  public async getQuizByPublicId(
+    req: Request,
+    res: Response,
+  ): Promise<Response> {
+    const data = await this.quizService.getQuizByPublicId(
+      req.params.publicId as string,
+    );
+
+    return generateResponse(res, {
+      statusCode: HttpStatus.OK,
+      message: "Quiz fetched successfully",
+      data,
+    });
+  }
 }

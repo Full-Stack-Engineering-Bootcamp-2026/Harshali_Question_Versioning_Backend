@@ -34,6 +34,12 @@ export class QuizRoutes {
       authenticate,
       asyncHandler(this.controller.getAllQuizzes.bind(this.controller)),
     );
+
+    this.router.get(
+      "/:publicId",
+      authenticate,
+      asyncHandler(this.controller.getQuizByPublicId.bind(this.controller)),
+    );
   }
 
   public getRouter(): Router {

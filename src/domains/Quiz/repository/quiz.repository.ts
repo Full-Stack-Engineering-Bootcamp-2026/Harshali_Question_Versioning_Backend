@@ -43,4 +43,20 @@ export class QuizRepository {
       },
     });
   }
+  //quiz joined with quiz que ,que version,que opions
+  public async findQuizDetailsByPublicId(
+    publicId: string,
+  ): Promise<Quiz | null> {
+    return await this.quizRepository
+      .createQueryBuilder("quiz")
+      .leftJoinAndSelect("quiz.quizQuestions", "quizQuestion")
+      .leftJoinAndSelect("quizQuestion.question", "question")
+      .leftJoinAndSelect("quizQuestion.questionVersion", "questionVersion")
+      .leftJoinAndSelect("questionVersion.options", "option")
+      .where("quiz.publicId = :publicId", { publicId })
+      .andWhere("quiz.isActive = :isActive", { isActive: true })
+      .orderBy("quizQuestion.questionOrder", "ASC")
+      .addOrderBy("option.optionOrder", "ASC")
+      .getOne();
+  }
 }

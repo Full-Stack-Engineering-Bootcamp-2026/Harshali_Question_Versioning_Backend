@@ -6,7 +6,7 @@ import { QuestionRepository } from "../../Question/repository/question.repositor
 import { CreateQuizRequestDto, QuizResponseDto } from "../dto/quiz.dto";
 
 import { NotFoundException } from "../../../common/exceptions";
-
+import { QuizDetailResponseDto } from "../dto/quiz.dto";
 @Service()
 export class QuizService {
   constructor(
@@ -68,5 +68,34 @@ export class QuizService {
       title: quiz.title,
       totalQuestions: quiz.quizQuestions ? quiz.quizQuestions.length : 0,
     }));
+  }
+  // GET QUIZ BY PUBLIC ID
+  public async getQuizByPublicId(
+    publicId: string,
+  ): Promise<QuizDetailResponseDto> {
+    const quiz = await this.quizRepository.findQuizDetailsByPublicId(publicId);
+
+    if (!quiz) {
+      throw new NotFoundException("Quiz not found");
+    }
+
+    return {
+      publicId: quiz.publicId,
+      title: quiz.title,
+
+      questions: quiz.quizQuestions.map((quizQuestion) => ({
+        questionPublicId: quizQuestion.question.publicId,
+
+        questionText: quizQuestion.questionVersion.questionText,
+
+        answerType: quizQuestion.questionVersion.answerType,
+
+        versionNumber: quizQuestion.questionVersion.versionNumber,
+
+        options: quizQuestion.questionVersion.options.map(
+          (option) => option.optionText,
+        ),
+      })),
+    };
   }
 }
