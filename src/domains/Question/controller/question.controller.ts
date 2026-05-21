@@ -37,13 +37,19 @@ export class QuestionController {
     });
   }
 
-  public async getAllQuestions(req: Request, res: Response): Promise<Response> {
-    const data = await this.questionService.getAllQuestions();
+  public async getAllQuestions(req: Request, res: Response) {
+    const page = Number(req.query.page);
+    const limit = Number(req.query.limit);
+
+    const result = await this.questionService.getAllQuestions(page, limit);
 
     return generateResponse(res, {
       statusCode: HttpStatus.OK,
       message: "Questions fetched successfully",
-      data,
+      data: result.data,
+      additionalFields: {
+        pagination: result.pagination,
+      },
     });
   }
 

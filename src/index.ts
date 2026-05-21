@@ -15,7 +15,7 @@ import {
 } from "./common/middleware/error-handler.middleware";
 
 import { AuthRoutes } from "./domains/user/route/auth.routes";
-import { AdminRoutes } from "./domains/user/route/admin.routes";
+
 import { QuestionRoutes } from "./domains/Question/route/question.route";
 import { QuizRoutes } from "./domains/Quiz/route/quiz.route";
 
@@ -35,7 +35,7 @@ class Application {
 
   private initializeMiddleware(): void {
     const allowedOrigins = (
-      process.env.ALLOWED_ORIGINS || "http://localhost:5173"
+      process.env.ALLOWED_ORIGINS || "http://localhost:5174"
     ).split(",");
 
     this.app.use(

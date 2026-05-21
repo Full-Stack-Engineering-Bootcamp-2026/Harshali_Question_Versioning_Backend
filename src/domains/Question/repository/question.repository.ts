@@ -63,24 +63,25 @@ export class QuestionRepository {
     await this.versionRepository.update(id, data);
   }
   //que with version with option(arr of que obj)
-  public async findAllQuestions(): Promise<Question[]> {
+  public async findAllQuestions(
+    page: number,
+    limit: number,
+  ): Promise<[Question[], number]> {
     return await this.questionRepository
       .createQueryBuilder("question")
-
       .leftJoinAndSelect(
         "question.versions",
         "version",
         "version.isLatest = true",
       )
-
       .leftJoinAndSelect("version.options", "option")
-
       .where("question.isActive = :isActive", {
         isActive: true,
       })
-
       .orderBy("question.createdAt", "DESC")
-      .getMany();
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
   }
 
   public async findQuestionDetailsByPublicId(

@@ -97,10 +97,13 @@ export class QuestionService {
     };
   }
 
-  public async getAllQuestions(): Promise<QuestionResponseDto[]> {
-    const questions = await this.questionRepository.findAllQuestions();
+  public async getAllQuestions(page = 1, limit = 10) {
+    const [questions, total] = await this.questionRepository.findAllQuestions(
+      page,
+      limit,
+    );
 
-    return questions.map((question) => {
+    const data = questions.map((question) => {
       const latestVersion = question.versions[0];
 
       return {
@@ -111,8 +114,17 @@ export class QuestionService {
         options: latestVersion.options.map((option) => option.optionText),
       };
     });
-  }
 
+    return {
+      data,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
   public async getQuestionByPublicId(
     publicId: string,
   ): Promise<QuestionResponseDto> {
