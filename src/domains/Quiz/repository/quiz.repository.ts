@@ -47,18 +47,43 @@ export class QuizRepository {
   //quiz joined with quiz que ,que version,que opions
   public async findQuizDetailsByPublicId(
     publicId: string,
-  ): Promise<Quiz | null> {
-    return await this.quizRepository
-      .createQueryBuilder("quiz")
-      .leftJoinAndSelect("quiz.quizQuestions", "quizQuestion")
+    page: number,
+    limit: number,
+  ) {
+    const quiz = await this.quizRepository.findOne({
+      where: {
+        publicId,
+        isActive: true,
+      },
+    });
+
+    if (!quiz) {
+      return null;
+    }
+
+    const [quizQuestions, total] = await this.quizQuestionRepository
+      .createQueryBuilder("quizQuestion")
       .leftJoinAndSelect("quizQuestion.question", "question")
-      .leftJoinAndSelect("quizQuestion.questionVersion", "questionVersion")
+      .leftJoinAndSelect(
+        "question.versions",
+        "questionVersion",
+        "questionVersion.isLatest = true",
+      )
       .leftJoinAndSelect("questionVersion.options", "option")
-      .where("quiz.publicId = :publicId", { publicId })
-      .andWhere("quiz.isActive = :isActive", { isActive: true })
+      .where("quizQuestion.quizId = :quizId", {
+        quizId: quiz.id,
+      })
       .orderBy("quizQuestion.questionOrder", "ASC")
       .addOrderBy("option.optionOrder", "ASC")
-      .getOne();
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return {
+      quiz,
+      quizQuestions,
+      total,
+    };
   }
 
   public async findQuizByPublicId(publicId: string): Promise<Quiz | null> {

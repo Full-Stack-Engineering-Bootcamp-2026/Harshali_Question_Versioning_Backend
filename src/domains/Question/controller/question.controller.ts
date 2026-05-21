@@ -38,8 +38,8 @@ export class QuestionController {
   }
 
   public async getAllQuestions(req: Request, res: Response) {
-    const page = Number(req.query.page);
-    const limit = Number(req.query.limit);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 5;
 
     const result = await this.questionService.getAllQuestions(page, limit);
 

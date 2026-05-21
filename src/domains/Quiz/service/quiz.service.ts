@@ -70,35 +70,50 @@ export class QuizService {
     }));
   }
   // GET QUIZ BY PUBLIC ID
-  public async getQuizByPublicId(
-    publicId: string,
-  ): Promise<QuizDetailResponseDto> {
-    const quiz = await this.quizRepository.findQuizDetailsByPublicId(publicId);
+  public async getQuizByPublicId(publicId: string, page = 1, limit = 1) {
+    const result = await this.quizRepository.findQuizDetailsByPublicId(
+      publicId,
+      page,
+      limit,
+    );
 
-    if (!quiz) {
+    if (!result) {
       throw new NotFoundException("Quiz not found");
     }
 
     return {
-      publicId: quiz.publicId,
-      title: quiz.title,
+      data: {
+        publicId: result.quiz.publicId,
+        title: result.quiz.title,
 
-      questions: quiz.quizQuestions.map((quizQuestion) => ({
-        questionPublicId: quizQuestion.question.publicId,
+        questions: result.quizQuestions.map((quizQuestion) => {
+          const latestVersion = quizQuestion.question.versions[0];
 
-        questionVersionPublicId: quizQuestion.questionVersion.publicId,
+          return {
+            questionPublicId: quizQuestion.question.publicId,
 
-        questionText: quizQuestion.questionVersion.questionText,
+            questionVersionPublicId: latestVersion.publicId,
 
-        answerType: quizQuestion.questionVersion.answerType,
+            questionText: latestVersion.questionText,
 
-        versionNumber: quizQuestion.questionVersion.versionNumber,
+            answerType: latestVersion.answerType,
 
-        options: quizQuestion.questionVersion.options.map((option) => ({
-          publicId: option.publicId,
-          optionText: option.optionText,
-        })),
-      })),
+            versionNumber: latestVersion.versionNumber,
+
+            options: latestVersion.options.map((option) => ({
+              publicId: option.publicId,
+              optionText: option.optionText,
+            })),
+          };
+        }),
+      },
+
+      pagination: {
+        page,
+        limit,
+        total: result.total,
+        totalPages: Math.ceil(result.total / limit),
+      },
     };
   }
 }

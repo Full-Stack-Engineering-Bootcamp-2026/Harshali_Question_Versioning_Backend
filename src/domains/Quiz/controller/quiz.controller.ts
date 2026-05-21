@@ -36,18 +36,25 @@ export class QuizController {
     });
   }
 
-  public async getQuizByPublicId(
-    req: Request,
-    res: Response,
-  ): Promise<Response> {
-    const data = await this.quizService.getQuizByPublicId(
-      req.params.publicId as string,
+  public async getQuizByPublicId(req: Request, res: Response) {
+    const publicId = req.params.publicId as string;
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 5;
+
+    const result = await this.quizService.getQuizByPublicId(
+      publicId,
+      page,
+      limit,
     );
 
     return generateResponse(res, {
       statusCode: HttpStatus.OK,
       message: "Quiz fetched successfully",
-      data,
+      data: result.data,
+      additionalFields: {
+        pagination: result.pagination,
+      },
     });
   }
 }
