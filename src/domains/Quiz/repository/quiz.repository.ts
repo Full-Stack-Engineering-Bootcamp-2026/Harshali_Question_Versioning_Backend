@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { Service } from "typedi";
 
 import { AppDataSource } from "../../../db/data-source";
@@ -61,23 +61,53 @@ export class QuizRepository {
       return null;
     }
 
-    const [quizQuestions, total] = await this.quizQuestionRepository
+    const total = await this.quizQuestionRepository.count({
+      where: {
+        quizId: quiz.id,
+      },
+    });
+
+    const rows = await this.quizQuestionRepository
       .createQueryBuilder("quizQuestion")
-      .leftJoinAndSelect("quizQuestion.question", "question")
-      .leftJoinAndSelect(
-        "question.versions",
-        "questionVersion",
-        "questionVersion.isLatest = true",
-      )
-      .leftJoinAndSelect("questionVersion.options", "option")
+      .select("quizQuestion.id", "id")
       .where("quizQuestion.quizId = :quizId", {
         quizId: quiz.id,
       })
       .orderBy("quizQuestion.questionOrder", "ASC")
-      .addOrderBy("option.optionOrder", "ASC")
       .skip((page - 1) * limit)
       .take(limit)
-      .getManyAndCount();
+      .getRawMany();
+
+    const ids = rows.map((row) => row.id);
+
+    if (ids.length === 0) {
+      return {
+        quiz,
+        quizQuestions: [],
+        total,
+      };
+    }
+
+    const quizQuestions = await this.quizQuestionRepository.find({
+      where: {
+        id: In(ids),
+      },
+      relations: {
+        question: {
+          versions: {
+            options: true,
+          },
+        },
+      },
+    });
+
+    quizQuestions.sort((a, b) => a.questionOrder - b.questionOrder);
+
+    quizQuestions.forEach((quizQuestion) => {
+      quizQuestion.question.versions = quizQuestion.question.versions.filter(
+        (version) => version.isLatest,
+      );
+    });
 
     return {
       quiz,
